@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "es5", // Set the ECMAScript target version for your project
+      "module": "System", // Use the ES6 module system
+      "lib": ["dom", "dom.iterable", "esnext"], // Include necessary libraries for your project
+      "allowJs": true, // Allow JavaScript files in TypeScript project
+      "jsx": "react", // Enable JSX/TSX support
+      "strict": true, // Enable strict type-checking
+      "esModuleInterop": true, // Enable easier interoperability with CommonJS modules
+      "skipLibCheck": true, // Skip type checking of declaration files to speed up compilation (optional, but recommended for large projects)
+      "forceConsistentCasingInFileNames": true // Ensure consistent casing of file names (optional, but recommended for cross-platform development)
+    },
+    "files": [
+      "src/task-1/CustomButton.tsx",
+      
+    ]
+  }
