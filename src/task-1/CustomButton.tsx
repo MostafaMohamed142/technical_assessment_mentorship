@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 
 interface DropDownOptionProps{
     label : string;
@@ -17,7 +17,18 @@ const Dropdown: React.FC<DropDownProps>  = ({Label,defaultValue ,options,onSelec
     const [selectedValue, setSelectedValue] = useState(
       defaultValue ? defaultValue.label : "Select an option"
     );
-  
+    const dropdownRef = useRef<HTMLDivElement | null>(null)
+      useEffect(()=>{
+        const handleClickOutside = (event : MouseEvent)=>{
+          if(dropdownRef.current && !dropdownRef.current.contains(event.target as Node)){
+              setIsOpen(false)
+          }
+          return ()=>{
+            window.removeEventListener('click',handleClickOutside)
+          }
+        }
+        document.addEventListener('click',handleClickOutside)
+      },[])
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
     };
@@ -31,7 +42,7 @@ const Dropdown: React.FC<DropDownProps>  = ({Label,defaultValue ,options,onSelec
     };
   
     return (
-      <div className={`dropdown ${className}`}>
+      <div className={`dropdown ${className}`} ref={dropdownRef}>
         <button className="btn btn-secondary" onClick={toggleDropdown}>
           {Label || selectedValue}
         </button>

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomButton from './task-1/CustomButton'
@@ -19,11 +18,11 @@ function App() {
   };
   return (
     <div className="App">
-      <button onClick={()=>setShow(!show)}>Switch task</button>
-       <div className={show? 'd-block' : 'd-none'} >
-        <h4>Custom Button</h4>
+      <button onClick={()=>setShow(!show)} className='btn btn-primary switch'>Switch task</button>
+       <div className={show? 'd-block' : 'd-none'} style={{margin:'5% 5%'}} >
+        <h4 className='fs-4'>Custom Button</h4>
       <CustomButton
-        Label="Select an option"
+        Label={userOption? userOption : "select an option"}
         defaultValue={options[0]}
         options={options}
         onSelection={handleOptionSelection}
