@@ -4,82 +4,117 @@ const QuestionForm = () => {
   const [question, setQuestion] = useState('');
   const [answers, setAnswers] = useState('');
   const [answerOptions, setAnswerOptions] = useState([]);
+  const [selectedAnswer,setSelectedAnswer] =useState() 
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [isMultiChoice,setIsMultiChoice] = useState(false)
-  const[task,setTask] = useState([])
+  const [submittedData,setSubmittedData] = useState(null)
+
 
   const addChoice = (choice) => {
     setAnswerOptions([...answerOptions, choice]);
     setAnswers('');
   };
 
-  const handleCheckboxChange = (index, isChecked) => {
-    if (isChecked) {
-      
-      setCorrectAnswers([...correctAnswers, answerOptions[index]]);
+  const handleChoiceChange = (index, isChecked) => {
+    if (isMultiChoice) {
+      // Handle multiple choice (checkboxes)
+      if (isChecked) {
+        setCorrectAnswers([...correctAnswers, answerOptions[index]]);
+      } else {
+        setCorrectAnswers(correctAnswers.filter((answer) => answer !== answerOptions[index]));
+      }
     } else {
-      
-      setCorrectAnswers(correctAnswers.filter((answer) => answer !== answerOptions[index]));
+      // Handle single choice (radio buttons)
+      setSelectedAnswer(answerOptions[index]);
     }
-    const numOfSelections = correctAnswers.length + (isChecked ? 1 : -1);
-    console.log(numOfSelections)
-   
-      setIsMultiChoice(numOfSelections > 1);
-    
   };
+    
+    // const numOfSelections = correctAnswers.length + (isChecked ? 1 : -1);
+    // console.log(numOfSelections)
+   
+    //   setIsMultiChoice(numOfSelections > 1);
+    
+  
   const handleSubmit =()=>{
-    let answersIndex = correctAnswers.map((ans)=> answerOptions.indexOf(ans))
+    let answersIndex = correctAnswers.map((ans)=> answerOptions.indexOf(ans));
+    let singleAnswerIndex = answerOptions.indexOf(selectedAnswer)
     let field = {
       title: question,
       choices:answerOptions,
-      validAnswers:answersIndex
+      validAnswers:isMultiChoice?answersIndex:singleAnswerIndex
     }
     console.log(field)
+    setSubmittedData(field)
     setQuestion('')
-    setTask(field)
+    setAnswerOptions([]);
+    setCorrectAnswers([]);
   }
 
   return (
-    <div>
+    <div className='question-form'>
       <h3>Enter a Question</h3>
-      <input
+      <div className='d-flex justify-content-center' style={{width: 'fit-content',
+  padding: '10px'}}>
+        <input
         type="text"
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Enter a question"
       />
+      <button className={isMultiChoice? "btn btn-primary ms-2 pressed" : "btn btn-primary ms-2"} onClick={()=>setIsMultiChoice(!isMultiChoice)}>Multi</button>
+      </div>
+      
       <h3>Answers</h3>
-      <input
+      <div className='d-flex justify-content-center'style={{width: 'fit-content',
+  padding: '10px'}} >
+         <input
         type="text"
         value={answers}
         onChange={(e) => setAnswers(e.target.value)}
       />
-      <button onClick={() => addChoice(answers)}>Add a Choice</button>
+      <button onClick={() => addChoice(answers)} className='btn btn-primary ms-2'>Add a Choice</button>
+      </div>
+     
 
       <h3>Correct Answers</h3>
-      <ul>
+      <ul className='list-unstyled'>
         {answerOptions.map((ans, index) => (
-          <li key={index}>
+          <li key={index} className='fs-5 p-2'>
             {ans}
-            <input
-              type={isMultiChoice ? 'checkbox' : 'radio'}
-              checked={correctAnswers.includes(ans)}
-              onChange={(e) => handleCheckboxChange(index, e.target.checked)}
-            />
+            {isMultiChoice ? (
+              <input
+                type='checkbox'
+                checked={correctAnswers.includes(ans)}
+                onChange={(e) => handleChoiceChange(index, e.target.checked)}
+              />
+            ) : (
+              <input
+                type='radio'
+                checked={selectedAnswer === ans}
+                onChange={() => handleChoiceChange(index)}
+              />
+            )}
           </li>
         ))}
       </ul>
-      <button onClick={handleSubmit}>submit</button>
-       {task && (
-        <div>
-        <span>questionTitle{task.title}</span><br/>
-        <span>choices:{task.choices}</span><br/>
-        <span>Valid Answers: {task.validAnswers}</span>
+      <button onClick={handleSubmit} className='btn bg-dark text-white ms-5 mb-1'>submit</button>
+      {submittedData && (
+        <div className='answers'>
+          <span>questionTitle: <span className='text-dark'>{submittedData.title}</span></span><br />
+          <span>choices: <span className='text-dark'>{submittedData.choices.join(', ')}</span></span><br />
+          <span>
+            Valid Answers:{' '}
+            <span className='text-dark'>{isMultiChoice
+              ? submittedData.validAnswers
+              : submittedData.validAnswers}</span>
+            
+          </span>
         </div>
-      )
-      } 
+      )}
     </div>
   );
 };
 
 export default QuestionForm;
+
+

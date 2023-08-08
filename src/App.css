@@ -24,3 +24,38 @@
     color: white;
     border-radius: 4px;
 }
+.question-form{
+    border: 1px solid #463131;
+    
+}
+.question-form h3{
+    padding: 10px;
+  text-decoration: underline auto;
+}
+.question-form input {
+    border: 1px solid darkgray;
+    padding: 4px;
+    border-radius: 5px;
+}
+.pressed{
+    background-color: red !important;
+    border:none !important;
+    transform: scale(0.9);
+}
+.answers{
+    display: flex;
+  justify-content: space-around;
+  margin-top: 3%;
+  margin-bottom: 2%;
+  flex-direction: column;
+  border: 1px solid whitesmoke;
+  width: 20%;
+  padding: 16px;
+  margin-left: 40%;
+  box-shadow: 1px 2px 3px black;
+  border-radius: 6px;
+}
+.answers span{
+    font-size: 20px;
+    color: red;
+}
